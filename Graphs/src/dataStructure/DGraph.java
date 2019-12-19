@@ -1,37 +1,41 @@
 package dataStructure;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 
 public class DGraph implements graph{
+	private Map<Integer, node_data> graph = new HashMap<Integer,node_data>();
 
 	@Override
 	public node_data getNode(int key) {
-		// TODO Auto-generated method stub
-		return null;
+		return (node_data) this.graph.get(key);
 	}
 
 	@Override
 	public edge_data getEdge(int src, int dest) {
-		// TODO Auto-generated method stub
-		return null;
+		return ((Node)graph.get(src)).edges.get(dest);
 	}
 
 	@Override
 	public void addNode(node_data n) {
-		// TODO Auto-generated method stub
-		
+		graph.put(n.getKey(),n); 
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
-		// TODO Auto-generated method stub
-		
+		Edge e = new Edge(src, dest, w);
+		((Node)graph.get(src)).edges.put(dest, e);
 	}
-
 	@Override
 	public Collection<node_data> getV() {
-		// TODO Auto-generated method stub
-		return null;
+		return graph.values();
 	}
 
 	@Override
@@ -42,14 +46,20 @@ public class DGraph implements graph{
 
 	@Override
 	public node_data removeNode(int key) {
-		// TODO Auto-generated method stub
+		Node n = new Node();
+		Iterator<Node> itP1 = n.iteretor();
+		if(this.graph.containsKey(key) == true) {
+			graph.put(key, null);
+			this.graph.remove(key);
+		}
+		
 		return null;
 	}
 
 	@Override
 	public edge_data removeEdge(int src, int dest) {
-		// TODO Auto-generated method stub
 		return null;
+	
 	}
 
 	@Override
@@ -69,5 +79,6 @@ public class DGraph implements graph{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
 
 }
