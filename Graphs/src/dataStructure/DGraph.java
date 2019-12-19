@@ -1,5 +1,6 @@
 package dataStructure;
 
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,8 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 
+
 public class DGraph implements graph{
 	private Map<Integer, node_data> graph = new HashMap<Integer,node_data>();
+	private int countNode = 0;
+	private int countEdge = 0;
+	private int ModeCount = 0;
 
 	@Override
 	public node_data getNode(int key) {
@@ -26,13 +31,18 @@ public class DGraph implements graph{
 	@Override
 	public void addNode(node_data n) {
 		graph.put(n.getKey(),n); 
+		countNode++;
+		ModeCount++;
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
 		Edge e = new Edge(src, dest, w);
 		((Node)graph.get(src)).edges.put(dest, e);
+		countEdge++;
+		ModeCount++;
 	}
+	
 	@Override
 	public Collection<node_data> getV() {
 		return graph.values();
@@ -40,45 +50,50 @@ public class DGraph implements graph{
 
 	@Override
 	public Collection<edge_data> getE(int node_id) {
-		// TODO Auto-generated method stub
-		return null;
+		return ((Node)graph.get(node_id)).edges.values();
 	}
 
 	@Override
 	public node_data removeNode(int key) {
-		Node n = new Node();
-		Iterator<Node> itP1 = n.iteretor();
-		if(this.graph.containsKey(key) == true) {
-			graph.put(key, null);
-			this.graph.remove(key);
+		node_data n = new Node();
+		Iterator<Integer> iter = graph.keySet().iterator();
+		while(iter.hasNext()) {
+			removeEdge(iter.next(), key);
 		}
-		
-		return null;
+		graph.put(key, null);
+		n = this.graph.remove(key);
+		countNode--;
+		ModeCount++;
+		return n;
 	}
 
 	@Override
 	public edge_data removeEdge(int src, int dest) {
-		return null;
-	
+		edge_data e = ((Node)graph.get(src)).edges.remove(dest);
+		countEdge--;
+		ModeCount++;
+		if(e == null) {
+			return null;
+		}
+		else {
+			return e;
+		}	
 	}
 
 	@Override
 	public int nodeSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return countNode;
 	}
 
 	@Override
 	public int edgeSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return countEdge;
 	}
 
 	@Override
 	public int getMC() {
-		// TODO Auto-generated method stub
-		return 0;
+		return ModeCount;
 	}
-	
+
 
 }
