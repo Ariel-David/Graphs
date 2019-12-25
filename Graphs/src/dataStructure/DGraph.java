@@ -1,6 +1,12 @@
 package dataStructure;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,11 +18,11 @@ import java.util.Map;
 
 
 
-public class DGraph implements graph{
-	private Map<Integer, node_data> graph = new HashMap<Integer,node_data>();
-	private int countNode = 0;
-	private int countEdge = 0;
-	private int ModeCount = 0;
+public class DGraph implements graph, Serializable{
+	public Map<Integer, node_data> graph = new HashMap<Integer,node_data>();
+	public int countNode = 0;
+	public int countEdge = 0;
+	public int ModeCount = 0;
 
 	@Override
 	public node_data getNode(int key) {
@@ -94,6 +100,40 @@ public class DGraph implements graph{
 	public int getMC() {
 		return ModeCount;
 	}
+	
+	public void save(String file_name) {
+		try {    
+			FileOutputStream file = new FileOutputStream(file_name); 
+			ObjectOutputStream out = new ObjectOutputStream(file); 
 
+			out.writeObject(this);
+			out.close(); 
+			file.close();  
+		}   
+		catch(IOException ex)  { 
+			System.out.println("IOException is caught"); 
+		}
+	}
+	
+	public void init(String file_name) {
+		graph g = new DGraph();
+		try {    
+			FileInputStream file = new FileInputStream(file_name); 
+			ObjectInputStream in = new ObjectInputStream(file);  
+			g = (DGraph)in.readObject(); 
+			in.close(); 
+			file.close();   
+		} 
+
+		catch(IOException ex) 
+		{ 
+			System.out.println("IOException is caught"); 
+		} 
+
+		catch(ClassNotFoundException ex) 
+		{ 
+			System.out.println("ClassNotFoundException is caught"); 
+		} 		
+	}
 
 }
