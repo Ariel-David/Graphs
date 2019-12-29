@@ -17,10 +17,36 @@ public class Node implements node_data, Serializable{
 	String info;	
 	public	Map<Integer, edge_data> edges= new HashMap<Integer,edge_data>();
 	public List<Node> ShortestPath = new LinkedList<>();
+
+	public Node(){
+	this.key = 0;
+	this.Weight = 0;
+	this.tag = 0;
+	this.location = null;
+	this.info = "";
+
+	}
+	
+	public Node(int key , double Weight , int tag, Point3D location,String info){
+	this.key = key;
+	this.Weight = Weight;
+	this.tag = tag;
+	this.location = location;
+	this.info = info;
+	}
+	
+	public Node(Node n) {
+		this.key = n.key;
+		this.Weight = n.Weight;
+		this.tag = n.tag;
+		this.location = n.location;
+		this.info = n.info;	
+	}
 	
 	public void setKey(int key) {
 		this.key = key;
 	}
+	
 	@Override
 	public int getKey() {
 		return this.key;
@@ -67,23 +93,23 @@ public class Node implements node_data, Serializable{
 	public void setTag(int t) {
 		this.tag = t;
 	}
-	
+
 	public Iterator<Node> iteretor() {
 		return this.iteretor();
 	}
-	
+
 	public void setColorWhite() {
 		this.setTag(0);
 	}
-	
+
 	public void setColorGray() {
 		this.setTag(1);
 	}
-	
+
 	public void setColorBlack() {
 		this.setTag(2);
 	}
-	
+
 	public boolean isWhite() {
 		if( this.getTag() == 0) {
 			return true;
@@ -92,6 +118,7 @@ public class Node implements node_data, Serializable{
 			return false;
 		}
 	}
+	
 	public boolean isGray() {
 		if( this.getTag() == 1) {
 			return true;
@@ -101,6 +128,7 @@ public class Node implements node_data, Serializable{
 		}
 
 	}
+	
 	public boolean isBlack() {
 		if( this.getTag() == 2) {
 			return true;
@@ -109,8 +137,9 @@ public class Node implements node_data, Serializable{
 			return false;
 		}
 	}
+	
 	public void setShortestPath(LinkedList<Node> shortestPath2) {
 		this.ShortestPath = shortestPath2;
 	}
-	
+
 }

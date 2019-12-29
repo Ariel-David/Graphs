@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ import dataStructure.Node;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
+import utils.StdDraw;
 /**
  * This empty class represents the set of graph-theory algorithms
  * which should be implemented as part of Ex2 - Do edit this class.
@@ -48,6 +50,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			graph = (graph) in.readObject(); 
 			in.close(); 
 			file.close();   
+			System.out.println("Object has been deserialized"); 
+
 		} 
 
 		catch(IOException ex) 
@@ -70,6 +74,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			out.writeObject(graph);
 			out.close(); 
 			file.close();  
+			System.out.println("Object has been serialized"); 
 		}   
 		catch(IOException ex)  { 
 			System.out.println("IOException is caught"); 
@@ -119,73 +124,50 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 	@Override
 	public double shortestPathDist(int src, int dest) {
-		return dest;
-//		calculateMinimumDistance(evaluationNode, edgeWeigh, sourceNode);
-//		return dest;
+		String s = "";
+		if(src == dest) {
+			return 0;
+		}
+		for(node_data vertex : graph.getV()) {
+			vertex.setWeight(Double.POSITIVE_INFINITY);
+			vertex.setTag(0);
+		}
+		graph.getNode(src);
+		shortPathDist(src,dest,s);
+		return graph.getNode(dest).getWeight();
+	
 	}
 
-	public graph calculateShortestPathFromSource(graph graph, int source) {
-		return graph;
-//		DGraph graphDijkstra = new DGraph();
-//		graphDijkstra = (DGraph) g;
-//		graphDijkstra.getNode(source).setWeight(0);
-//		Set<Node> settledNodes = new HashSet<>();
-//		Set<Node> unsettledNodes = new HashSet<>();
-//		unsettledNodes.add((Node) graphDijkstra.getNode(source));
-//		while (unsettledNodes.size() != 0) {
-//			Node currentNode = getLowestDistanceNode(unsettledNodes);
-//			unsettledNodes.remove(currentNode);
-//			for (edge_data adjacencyPair : graphDijkstra.getE(currentNode.getKey())) {
-//				Node adjacentNode =  (Node) graphDijkstra.getNode(adjacencyPair.getSrc());
-//				Double edgeWeight = adjacencyPair.getWeight();
-//				if (!settledNodes.contains(adjacentNode)) {
-//					calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
-//					unsettledNodes.add(adjacentNode);
-//				}
-//			}
-//			//			for(int i=0; i<currentNode.edges.size(); i++) {
-//			//				Node adjacentNode = (Node) currentNode.edges.get(i);
-//			//				Double edgeWeight = currentNode.edges.get(i).getWeight();
-//			//				if (!settledNodes.contains(adjacentNode)) {
-//			//					calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
-//			//					unsettledNodes.add(adjacentNode);
-//			//				}
-//			//			}
-//			settledNodes.add(currentNode);
-//		}
-//		return graph;
+	private void shortPathDist(int src, int dest, String s) {
+		if(graph.getNode(src).getTag() == 1 && graph.getNode(src) == graph.getNode(dest)) {
+			return;
+		}
+		for (edge_data edges : graph.getE(src)) {
+			double newSum = edges.getWeight() + graph.getNode(edges.getSrc()).getWeight();
+			double currentSum = graph.getNode(edges.getSrc()).getWeight();
+			if(newSum < currentSum) {
+				graph.getNode(edges.getDest()).setWeight(newSum);
+				graph.getNode(edges.getDest()).setInfo(s + "->" +src);
+				graph.getNode(src).setTag(1);
+				shortPathDist(edges.getDest(), dest , s + "->" +src);
+			}
+		}
 	}
-
-	private void calculateMinimumDistance(Node evaluationNode, Double edgeWeigh, Node sourceNode) {
-//		Double sourceDistance = sourceNode.getWeight();
-//		if (sourceDistance + edgeWeigh < evaluationNode.getWeight()) {
-//			evaluationNode.setWeight(sourceDistance + edgeWeigh);
-//			LinkedList<Node> shortestPath = new LinkedList<>(sourceNode.ShortestPath);
-//			shortestPath.add(sourceNode);
-//			evaluationNode.setShortestPath(shortestPath);
-//		}
-//
-	}
-//
-	private Node getLowestDistanceNode(Set<Node> unsettledNodes) {
-		return null;
-//		Node lowestDistanceNode = null;
-//		double lowestDistance = Integer.MAX_VALUE;
-//		for (Node node: unsettledNodes) {
-//			double nodeDistance = node.getWeight();
-//			if (nodeDistance < lowestDistance) {
-//				lowestDistance = nodeDistance;
-//				lowestDistanceNode = node;
-//			}
-//
-//		}
-//	return lowestDistanceNode;
-}
 
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
-		// TODO Auto-generated method stub
-		return null;
+		List<node_data> visited = new ArrayList<>();
+		if(shortestPathDist(src, dest) == Double.POSITIVE_INFINITY) {
+			return null;
+		}
+		String str = graph.getNode(dest).getInfo();
+		str = str.substring(2);
+		String [] splitArray = str.split("->");
+		for(int i=0; i<splitArray.length; i++) {
+			visited.add(graph.getNode(Integer.parseInt(splitArray[i])));
+		}
+		visited.add(graph.getNode(dest));
+		return visited;
 	}
 
 	@Override
@@ -196,12 +178,9 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 	@Override
 	public graph copy() {
-		return this.graph = (graph) new Graph_Algo();
+		Graph_Algo ga = new Graph_Algo();
+		this.save("temp.txt");
+		ga.init("temp.txt");
+		return ga.graph;
 	}
-
-	public void copy(DGraph graphi) {
-		this.graph = new DGraph();
-		this.graph = graphi;
-	}
-
 }
