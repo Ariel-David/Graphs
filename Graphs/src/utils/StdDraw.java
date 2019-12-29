@@ -715,13 +715,51 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	// create the menu bar (changed to private)
 	private static JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("File");
-		menuBar.add(menu);
-		JMenuItem menuItem1 = new JMenuItem(" Save...   ");
+		JMenu menu1 = new JMenu("File");
+		menuBar.add(menu1);
+		JMenuItem menuItem1 = new JMenuItem(" Save File ");
+		menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		JMenuItem menuItem2 = new JMenuItem(" Load File ");
 		menuItem1.addActionListener(std);
-		menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		menu.add(menuItem1);
+		menuItem2.addActionListener(std);
+		menu1.add(menuItem1);
+		menu1.add(menuItem2);
+
+		JMenu menu2 = new JMenu("Vertex");
+		menuBar.add(menu2);
+		JMenuItem menuItem3 = new JMenuItem(" Add Vertex ");
+		JMenuItem menuItem4 = new JMenuItem(" Remove Vertex ");
+		menuItem3.addActionListener(std);
+		menuItem4.addActionListener(std);
+		menu2.add(menuItem3);
+		menu2.add(menuItem4);
+
+		
+		JMenu menu3 = new JMenu("Edge");
+		menuBar.add(menu3);
+		JMenuItem menuItem5 = new JMenuItem(" Remove Edge ");
+		JMenuItem menuItem6 = new JMenuItem(" Connect ");
+		menuItem5.addActionListener(std);
+		menuItem6.addActionListener(std);
+		menu3.add(menuItem5);
+		menu3.add(menuItem6);
+		
+		
+		JMenu menu4 = new JMenu("Algorithms");
+		menuBar.add(menu4);
+		JMenuItem menuItem7 = new JMenuItem(" isConnected ");
+		JMenuItem menuItem8 = new JMenuItem(" shortestPathDist ");
+		JMenuItem menuItem9 = new JMenuItem(" shortestPath ");
+		JMenuItem menuItem10 = new JMenuItem(" TSP ");
+		menuItem7.addActionListener(std);
+		menuItem8.addActionListener(std);
+		menuItem9.addActionListener(std);
+		menuItem10.addActionListener(std);
+		menu4.add(menuItem7);
+		menu4.add(menuItem8);
+		menu4.add(menuItem9);
+		menu4.add(menuItem10);
+
 		return menuBar;
 	}
 

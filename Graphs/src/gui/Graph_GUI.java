@@ -144,28 +144,8 @@ public class Graph_GUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String str = e.getActionCommand();
 
-		if(str.equals("Item 1")){
-			this.algoGraph.save("hey");
 		}
 	}
 
-	private void createMenuBar() {
-		MenuBar menuBar = new MenuBar();
-		Menu menu = new Menu("Menu");
-		menuBar.add(menu);
-		this.setMenuBar(menuBar);
-
-		MenuItem item1 = new MenuItem("Item 1");
-		item1.addActionListener(this);
-
-		MenuItem item2 = new MenuItem("Item 2");
-		item2.addActionListener(this);
-
-		menu.add(item1);
-		menu.add(item2);
-
-	}
-}
 
