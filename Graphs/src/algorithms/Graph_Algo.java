@@ -21,8 +21,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ArrayBlockingQueue;
-
 import dataStructure.DGraph;
+import dataStructure.Edge;
 import dataStructure.Node;
 import dataStructure.edge_data;
 import dataStructure.graph;
@@ -83,104 +83,134 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 	@Override
 	public boolean isConnected() {
-		Queue<Node> q= new ArrayBlockingQueue<Node>(graph.nodeSize());
-		if(graph.nodeSize()==1) {
-			return true;
-		}
-		for (node_data nodes : graph.getV()) {
-			nodes.setTag(0);
-		}
-		for (node_data v : graph.getV() ) {
-			Node node = (Node) v;
-			if (graph.getE(v.getKey()) == null) {
-				return false;
+		boolean flag = false;
+		Stack<node_data> s = new Stack<node_data>();
+		Iterator<node_data> iterNode = graph.getV().iterator();
+		while(iterNode.hasNext()) {
+			for (node_data nodes : graph.getV()) {
+				nodes.setTag(0);
 			}
-			q.add((Node) node);
-			node.setTag(1);
-			while (!q.isEmpty()) {
-				for (edge_data edge : q.peek().edges.values()) {
-					node_data des = (node_data) graph.getNode(edge.getDest());
-					if(des.getTag()==0) {
-						des.setTag(1);
-						q.add((Node) des);
-					}
-					q.remove();
-				}
-				for (node_data nodes : graph.getV()) {
-					if (nodes.getTag()==0) {
-						return false;
-					}
-					else {
-						nodes.setTag(0);
-					}
-				}
+			node_data currentNode = iterNode.next();
+			s.add(currentNode);
+			currentNode.setTag(1);
+			if(neiburs(currentNode,s).isEmpty()) {
+				flag = true;
 			}
-			for (node_data n : graph.getV()) {
-				n.setTag(0);
+			else {
+				flag = false;
 			}
 		}
-		return true;
-	}
+	return flag;
+}
 
-	@Override
-	public double shortestPathDist(int src, int dest) {
-		String s = "";
-		if(src == dest) {
-			return 0;
-		}
-		for(node_data vertex : graph.getV()) {
-			vertex.setWeight(Double.POSITIVE_INFINITY);
-			vertex.setTag(0);
-		}
-		graph.getNode(src);
-		shortPathDist(src,dest,s);
-		return graph.getNode(dest).getWeight();
-	
+private Stack<node_data> neiburs(node_data currentNode, Stack<node_data> s) {
+	Iterator<edge_data> iterEdge = graph.getE(currentNode.getKey()).iterator();
+	if(s.isEmpty()) {
+		return s;
 	}
-
-	private void shortPathDist(int src, int dest, String s) {
-		if(graph.getNode(src).getTag() == 1 && graph.getNode(src) == graph.getNode(dest)) {
-			return;
-		}
-		for (edge_data edges : graph.getE(src)) {
-			double newSum = edges.getWeight() + graph.getNode(edges.getSrc()).getWeight();
-			double currentSum = graph.getNode(edges.getSrc()).getWeight();
-			if(newSum < currentSum) {
-				graph.getNode(edges.getDest()).setWeight(newSum);
-				graph.getNode(edges.getDest()).setInfo(s + "->" +src);
-				graph.getNode(src).setTag(1);
-				shortPathDist(edges.getDest(), dest , s + "->" +src);
+	else {
+		while(iterEdge.hasNext()) {
+			edge_data e = iterEdge.next();
+			if(graph.getNode(e.getDest()).getTag() == 0 ) {
+				s.push(graph.getNode(e.getDest()));
+				graph.getNode(e.getDest()).setTag(1);
+				neiburs(graph.getNode(e.getDest()), s);
 			}
 		}
+		s.pop();
 	}
+	return s;
+}
 
-	@Override
-	public List<node_data> shortestPath(int src, int dest) {
-		List<node_data> visited = new ArrayList<>();
-		if(shortestPathDist(src, dest) == Double.POSITIVE_INFINITY) {
-			return null;
-		}
-		String str = graph.getNode(dest).getInfo();
-		str = str.substring(2);
-		String [] splitArray = str.split("->");
-		for(int i=0; i<splitArray.length; i++) {
-			visited.add(graph.getNode(Integer.parseInt(splitArray[i])));
-		}
-		visited.add(graph.getNode(dest));
-		return visited;
+@Override
+public double shortestPathDist(int src, int dest) {
+	String s = "";
+	if(src == dest) {
+		return 0;
 	}
+	for(node_data vertex : graph.getV()) {
+		vertex.setWeight(Double.POSITIVE_INFINITY);
+		vertex.setTag(0);
+	}
+	graph.getNode(src);
+	shortPathDist(src,dest,s);
+	return graph.getNode(dest).getWeight();
 
-	@Override
-	public List<node_data> TSP(List<Integer> targets) {
-		// TODO Auto-generated method stub
+}
+
+private void shortPathDist(int src, int dest, String s) {
+	if(graph.getNode(src).getTag() == 1 && graph.getNode(src) == graph.getNode(dest)) {
+		return;
+	}
+	for (edge_data edges : graph.getE(src)) {
+		double newSum = edges.getWeight() + graph.getNode(edges.getSrc()).getWeight();
+		double currentSum = graph.getNode(edges.getSrc()).getWeight();
+		if(newSum < currentSum) {
+			graph.getNode(edges.getDest()).setWeight(newSum);
+			graph.getNode(edges.getDest()).setInfo(s + "->" +src);
+			graph.getNode(src).setTag(1);
+			shortPathDist(edges.getDest(), dest , s + "->" +src);
+		}
+	}
+}
+
+@Override
+public List<node_data> shortestPath(int src, int dest) {
+	List<node_data> visited = new ArrayList<>();
+	if(shortestPathDist(src, dest) == Double.POSITIVE_INFINITY) {
 		return null;
 	}
-
-	@Override
-	public graph copy() {
-		Graph_Algo ga = new Graph_Algo();
-		this.save("temp.txt");
-		ga.init("temp.txt");
-		return ga.graph;
+	String str = graph.getNode(dest).getInfo();
+	str = str.substring(2);
+	String [] splitArray = str.split("->");
+	for(int i=0; i<splitArray.length; i++) {
+		visited.add(graph.getNode(Integer.parseInt(splitArray[i])));
 	}
+	visited.add(graph.getNode(dest));
+	return visited;
+}
+
+@Override
+public List<node_data> TSP(List<Integer> targets) {
+	boolean flag = false;
+	List<node_data> ans = new ArrayList<node_data>();
+	Iterator<Integer> it = targets.iterator();
+	while(it.hasNext() && !flag) {
+		ans = check(it.next(), targets);
+		if(ans != null) {
+			flag = true;
+		}
+	}
+	return ans;
+}
+
+private List<node_data> check(Integer curentNode , List<Integer> list) {
+	List<node_data> nodePath = new ArrayList<node_data>();
+	nodePath.add(graph.getNode(curentNode));
+	list.remove(new Integer(curentNode));
+	edge_data temp;
+	Iterator<edge_data> iter = graph.getE((graph.getNode(curentNode)).getKey()).iterator();
+	while(iter.hasNext()) {
+		temp = iter.next();
+		nodePath.add(graph.getNode(temp.getDest()));
+		if(list.contains(temp.getDest())) {
+			list.remove(new Integer(temp.getDest()));
+		}
+	}
+	if(!list.isEmpty()) {
+		return null;
+	}
+	else {
+		return nodePath;
+	}
+}
+
+
+@Override
+public graph copy() {
+	Graph_Algo ga = new Graph_Algo();
+	this.save("temp.txt");
+	ga.init("temp.txt");
+	return ga.graph;
+}
 }

@@ -29,7 +29,15 @@ import dataStructure.Edge;
 public class Graph_GUI extends JFrame implements ActionListener{
 	graph graph;
 	Graph_Algo algoGraph;
-
+	
+	public Graph_Algo getAlgoGraph(){
+		return algoGraph;
+	}
+	
+	public graph getGraph(){
+		return graph;
+	}
+	
 	public Graph_GUI() {
 		graph = new DGraph();
 		algoGraph = new Graph_Algo();
@@ -53,6 +61,7 @@ public class Graph_GUI extends JFrame implements ActionListener{
 		int x_max = 0;
 		int y_min = 0;
 		int y_max = 0;
+
 		Iterator<node_data> iter = this.graph.getV().iterator();
 		while(iter.hasNext()) {
 			node_data currentNode = iter.next();
@@ -69,8 +78,7 @@ public class Graph_GUI extends JFrame implements ActionListener{
 				y_max = (int) currentNode.getLocation().y();
 			}
 		}
-
-		StdDraw.setCanvasSize();
+		StdDraw.setCanvasSize(Math.abs(x_min+x_max) +300 , Math.abs(y_min+y_max)+300);
 		StdDraw.setXscale(x_min-10,x_max+10);
 		StdDraw.setYscale(y_min-10,y_max+10);
 	}
@@ -141,11 +149,12 @@ public class Graph_GUI extends JFrame implements ActionListener{
 			}
 		}
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
 
-		}
 	}
+
+}
 
 

@@ -29,6 +29,7 @@ package utils;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -68,12 +69,19 @@ import java.util.NoSuchElementException;
 import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+
+import algorithms.Graph_Algo;
+import algorithms.graph_algorithms;
+import dataStructure.graph;
+import gui.Graph_GUI;
 
 /**
  *  The {@code StdDraw} class provides a basic capability for
@@ -479,7 +487,10 @@ import javax.swing.KeyStroke;
  *  @author Kevin Wayne
  */
 public final class StdDraw implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
-
+	private static Graph_GUI graphGui;
+	public static void setGui(Graph_GUI g) {
+		graphGui = g;
+	}
 	/**
 	 *  The color black.
 	 */
@@ -734,7 +745,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		menu2.add(menuItem3);
 		menu2.add(menuItem4);
 
-		
+
 		JMenu menu3 = new JMenu("Edge");
 		menuBar.add(menu3);
 		JMenuItem menuItem5 = new JMenuItem(" Remove Edge ");
@@ -743,8 +754,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		menuItem6.addActionListener(std);
 		menu3.add(menuItem5);
 		menu3.add(menuItem6);
-		
-		
+
+
 		JMenu menu4 = new JMenu("Algorithms");
 		menuBar.add(menu4);
 		JMenuItem menuItem7 = new JMenuItem(" isConnected ");
@@ -1692,12 +1703,26 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
-		chooser.setVisible(true);
-		String filename = chooser.getFile();
-		if (filename != null) {
-			StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
-		}
+		switch(e.getActionCommand()) {
+
+		case " Save File ":
+			FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
+			chooser.setVisible(true);
+			String filename = chooser.getFile();
+			if (filename != null) {
+				StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
+			}
+			break;
+
+//		case " Load File ":
+//			FileDialog chooser1 = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
+//			chooser.setVisible(true);
+//			String filename = chooser1.getFile();
+//			if (filename != null) {
+//				StdDraw.save(chooser1.getDirectory() + File.separator + chooser1.getFile());
+//			}
+//			break;
+	}
 	}
 
 

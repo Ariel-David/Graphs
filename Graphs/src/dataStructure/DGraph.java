@@ -101,39 +101,5 @@ public class DGraph implements graph, Serializable{
 		return ModeCount;
 	}
 	
-	public void save(String file_name) {
-		try {    
-			FileOutputStream file = new FileOutputStream(file_name); 
-			ObjectOutputStream out = new ObjectOutputStream(file); 
-
-			out.writeObject(this);
-			out.close(); 
-			file.close();  
-		}   
-		catch(IOException ex)  { 
-			System.out.println("IOException is caught"); 
-		}
-	}
-	
-	public void init(String file_name) {
-		graph g = new DGraph();
-		try {    
-			FileInputStream file = new FileInputStream(file_name); 
-			ObjectInputStream in = new ObjectInputStream(file);  
-			g = (DGraph)in.readObject(); 
-			in.close(); 
-			file.close();   
-		} 
-
-		catch(IOException ex) 
-		{ 
-			System.out.println("IOException is caught"); 
-		} 
-
-		catch(ClassNotFoundException ex) 
-		{ 
-			System.out.println("ClassNotFoundException is caught"); 
-		} 		
-	}
 
 }
