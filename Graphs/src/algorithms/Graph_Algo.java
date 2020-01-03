@@ -36,11 +36,18 @@ import utils.StdDraw;
  */
 public class Graph_Algo implements graph_algorithms,Serializable{
 	public graph graph;
-
+	
+	/**
+	 * Default constructor
+	 */
 	public Graph_Algo() {
 		this.graph = new DGraph();
 	}
-
+	
+	/**
+	 * copy constructor
+	 * @param g.
+	 */
 	public Graph_Algo(graph g) {
 		this.graph = g;
 	}
@@ -89,6 +96,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			System.out.println("IOException is caught"); 
 		}
 	}
+	
 
 	@Override
 	public boolean isConnected() {
@@ -133,7 +141,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}
 		return s;
 	}
-
+	
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		String s = "";
@@ -145,12 +153,12 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			vertex.setTag(0);
 		}
 		graph.getNode(src).setWeight(0);;
-		shortPathDist(src,dest,s);
+		shortestPathDistHelper(src,dest,s);
 		return graph.getNode(dest).getWeight();
 
 	}
 
-	private void shortPathDist(int src, int dest, String s) {
+	private void shortestPathDistHelper(int src, int dest, String s) {
 		if(graph.getNode(src).getTag() == 1 && graph.getNode(src) == graph.getNode(dest)) {
 			return;
 		}
@@ -161,7 +169,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 				graph.getNode(edges.getDest()).setWeight(newSum);
 				graph.getNode(edges.getDest()).setInfo(s + "->" +src);
 				graph.getNode(src).setTag(1);
-				shortPathDist(edges.getDest(), dest , s + "->" +src);
+				shortestPathDistHelper(edges.getDest(), dest , s + "->" +src);
 			}
 		}
 	}
