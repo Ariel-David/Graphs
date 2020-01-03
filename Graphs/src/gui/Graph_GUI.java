@@ -27,8 +27,14 @@ import utils.StdDraw;
 import dataStructure.Edge;
 
 public class Graph_GUI extends JFrame implements ActionListener{
-	graph graph;
-	Graph_Algo algoGraph;
+	private graph graph;
+	private Graph_Algo algoGraph;
+	
+	public Graph_GUI() {
+		algoGraph = new Graph_Algo();
+		graph = new DGraph();
+		StdDraw.setGui(this);
+	}
 	
 	public Graph_Algo getAlgoGraph(){
 		return algoGraph;
@@ -38,15 +44,24 @@ public class Graph_GUI extends JFrame implements ActionListener{
 		return graph;
 	}
 	
-	public Graph_GUI() {
-		graph = new DGraph();
-		algoGraph = new Graph_Algo();
-	}
 	public Graph_GUI(graph g){
 		this.graph = g;
 		algoGraph = new Graph_Algo();
 		algoGraph.init(this.graph);
+		StdDraw.setGui(this);
 	}
+	
+	public void init(graph gr) {
+		this.graph = gr;
+		this.algoGraph.graph = gr;
+	}
+	
+	public void init(String name) {
+		this.algoGraph.init(name);
+		this.graph = algoGraph.graph;
+		drawGraph();
+	}
+	
 	public void drawGraph() {
 		setScale();
 		drawEdges();
@@ -95,17 +110,17 @@ public class Graph_GUI extends JFrame implements ActionListener{
 
 	public void printKey() {
 		StdDraw.setPenColor(Color.red);
-		StdDraw.setFont(new Font("Ariel", 3, 15));
 		StdDraw.setPenRadius(0.8);
 		Iterator<node_data> iter = this.graph.getV().iterator();
 		while(iter.hasNext()) {
+			StdDraw.setFont(new Font("Ariel", Font.BOLD, 19));
 			node_data currentNode = iter.next();
 			StdDraw.text(currentNode.getLocation().x()-1, currentNode.getLocation().y()-5,""+currentNode.getKey());;
 		}
 	}
 	public void drawEdges() {
-		StdDraw.setPenColor(Color.black);
-		StdDraw.setPenRadius(0.002);
+		StdDraw.setPenColor(Color.orange);
+		StdDraw.setPenRadius(0.003);
 		Iterator<node_data> iterNodes = this.graph.getV().iterator();
 		while(iterNodes.hasNext()){
 			node_data currentNode = iterNodes.next();
@@ -123,17 +138,14 @@ public class Graph_GUI extends JFrame implements ActionListener{
 			Iterator<edge_data> iterEdges = this.graph.getE(currentNode.getKey()).iterator();
 			while(iterEdges.hasNext()){
 				edge_data currentEdge = iterEdges.next();
-				StdDraw.setPenRadius(0.010);
+				StdDraw.setPenRadius(0.020);
 				StdDraw.setPenColor(StdDraw.GREEN);
-				StdDraw.point(((graph.getNode(currentEdge.getSrc()).getLocation().x()+
-						graph.getNode(currentEdge.getDest()).getLocation().x()*7)/8),
-						((graph.getNode(currentEdge.getSrc()).getLocation().y())+
-								graph.getNode(currentEdge.getDest()).getLocation().y()*7)/8);
+				StdDraw.point((currentNode.getLocation().x()+graph.getNode(currentEdge.getDest()).getLocation().x()*3)/4, (currentNode.getLocation().y()+graph.getNode(currentEdge.getDest()).getLocation().y()*3)/4);
 			}
 		}
 	}
 	public void drawEdgesWeight() {
-		StdDraw.setFont(new Font("Ariel", 2, 15));
+		StdDraw.setFont(new Font("Ariel", 2, 14));
 		StdDraw.setPenColor(Color.BLUE.darker());
 		Iterator<node_data> iterNodes = this.graph.getV().iterator();
 		while(iterNodes.hasNext()){
@@ -141,11 +153,9 @@ public class Graph_GUI extends JFrame implements ActionListener{
 			Iterator<edge_data> iterEdges = this.graph.getE(currentNode.getKey()).iterator();
 			while(iterEdges.hasNext()){
 				edge_data currentEdge = iterEdges.next();
-				StdDraw.text((graph.getNode(currentEdge.getSrc()).getLocation().x()+
-						graph.getNode(currentEdge.getDest()).getLocation().x())/2,
-						(graph.getNode(currentEdge.getSrc()).getLocation().y()+
-								graph.getNode(currentEdge.getDest()).getLocation().y())/2,
-						""+currentEdge.getWeight());
+				StdDraw.setFont(new Font("Ariel", Font.BOLD, 15));
+				StdDraw.setPenColor(Color.black);
+				StdDraw.text((currentNode.getLocation().x()+graph.getNode(currentEdge.getDest()).getLocation().x()*3)/4, (currentNode.getLocation().y()+graph.getNode(currentEdge.getDest()).getLocation().y()*3)/4, ""+ currentEdge.getWeight());
 			}
 		}
 	}

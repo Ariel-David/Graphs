@@ -9,7 +9,10 @@ public class Edge implements edge_data,Serializable {
 	double Weight;
 	String info;
 	int tag;
-
+	
+	/**
+	 * Default constructor.
+	 */
 	public Edge() {
 		this.src = 0;
 		this.dest = 0;
@@ -17,7 +20,14 @@ public class Edge implements edge_data,Serializable {
 		this.info = "";
 		this.Weight = 0;
 	}
-
+	/**
+	 * Full constructor.
+	 * @param src - The id of the source node of this edge.
+	 * @param dest - The id of the destination node of this edge.
+	 * @param tag - temporal data (aka color: e,g, white, gray, black).
+	 * @param weigth - the weight of this edge (positive value).
+	 * @param info -the remark (meta data) associated with this edge.
+	 */
 	public Edge(int src, int dest, double weight, String info , int tag) {
 		this.src = src;
 		this.dest = dest;
@@ -25,7 +35,10 @@ public class Edge implements edge_data,Serializable {
 		this.info = info;
 		this.Weight = weight;
 	}
-	
+	/**
+	 * Copy constructor.
+	 * @param other - a copied version of this edge.
+	 */
 	public Edge(Edge e) {
 		this.src = e.src;
 		this.dest = e.dest;

@@ -26,16 +26,25 @@ public class DGraph implements graph, Serializable{
 
 	@Override
 	public node_data getNode(int key) {
+		if(graph.get(key) == null) {
+			return null;
+		}
 		return (node_data) this.graph.get(key);
 	}
 
 	@Override
 	public edge_data getEdge(int src, int dest) {
+		if((graph.get(src) == null) && (graph.get(dest) == null)){
+			return null;
+		}	
 		return ((Node)graph.get(src)).edges.get(dest);
 	}
 
 	@Override
 	public void addNode(node_data n) {
+		if(graph.containsKey(n.getKey())) {
+			throw new RuntimeException("This vertex with the same key is already exist");
+		}
 		graph.put(n.getKey(),n); 
 		countNode++;
 		ModeCount++;
@@ -43,12 +52,20 @@ public class DGraph implements graph, Serializable{
 
 	@Override
 	public void connect(int src, int dest, double w) {
+		if(((Node)graph.get(src)).edges.containsKey(dest)) {
+			throw new RuntimeException("This edge is already exist");
+		}
+
+		if((graph.get(src)==null) || (graph.get(dest)==null)) {
+			throw new RuntimeException("Invalid input");
+		}
+
 		Edge e = new Edge(src, dest, w);
 		((Node)graph.get(src)).edges.put(dest, e);
 		countEdge++;
 		ModeCount++;
 	}
-	
+
 	@Override
 	public Collection<node_data> getV() {
 		return graph.values();
@@ -61,28 +78,33 @@ public class DGraph implements graph, Serializable{
 
 	@Override
 	public node_data removeNode(int key) {
-		node_data n = new Node();
-		Iterator<Integer> iter = graph.keySet().iterator();
-		while(iter.hasNext()) {
-			removeEdge(iter.next(), key);
+		if(!graph.containsKey(key)) {
+			return null;
 		}
-		graph.put(key, null);
-		n = this.graph.remove(key);
-		countNode--;
-		ModeCount++;
-		return n;
+		else {
+			node_data n = new Node();
+			Iterator<Integer> iter = graph.keySet().iterator();
+			while(iter.hasNext()) {
+				removeEdge(iter.next(), key);
+			}
+			graph.put(key, null);
+			n = this.graph.remove(key);
+			countNode--;
+			ModeCount++;
+			return n;
+		}
 	}
 
 	@Override
 	public edge_data removeEdge(int src, int dest) {
-		edge_data e = ((Node)graph.get(src)).edges.remove(dest);
-		countEdge--;
-		ModeCount++;
-		if(e == null) {
-			return null;
+		if(((Node)graph.get(src)).edges.containsKey(dest)) {
+			edge_data e = ((Node)graph.get(src)).edges.remove(dest);
+			countEdge--;
+			ModeCount++;
+			return e;
 		}
 		else {
-			return e;
+			return null;
 		}	
 	}
 
@@ -100,6 +122,5 @@ public class DGraph implements graph, Serializable{
 	public int getMC() {
 		return ModeCount;
 	}
-	
 
 }
