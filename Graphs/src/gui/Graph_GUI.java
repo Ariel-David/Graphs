@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 import java.util.Iterator;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -26,42 +27,60 @@ import utils.Range;
 import utils.StdDraw;
 import dataStructure.Edge;
 
-public class Graph_GUI extends JFrame implements ActionListener{
+public class Graph_GUI implements Serializable{
 	private graph graph;
 	private Graph_Algo algoGraph;
-	
+
+	/**
+	 * Default constructor
+	 */
 	public Graph_GUI() {
 		algoGraph = new Graph_Algo();
 		graph = new DGraph();
 		StdDraw.setGui(this);
 	}
-	
+
 	public Graph_Algo getAlgoGraph(){
 		return algoGraph;
 	}
-	
+
 	public graph getGraph(){
 		return graph;
 	}
-	
+
+	/**
+	 * A copy constructor
+	 * @param g - the given graph.
+	 */
 	public Graph_GUI(graph g){
 		this.graph = g;
 		algoGraph = new Graph_Algo();
 		algoGraph.init(this.graph);
 		StdDraw.setGui(this);
 	}
-	
-	public void init(graph gr) {
-		this.graph = gr;
-		this.algoGraph.graph = gr;
+
+	/**
+	 * Initialize the Graph_GUI from given graph.
+	 * @param gra - the given graph.
+	 */
+	public void init(graph gra) {
+		this.graph = gra;
+		this.algoGraph.graph = gra;
 	}
-	
+
+	/**
+	 * Initialize the Graph from a string.
+	 * @param name - the given string, represent a saved graph.
+	 */
 	public void init(String name) {
 		this.algoGraph.init(name);
 		this.graph = algoGraph.graph;
 		drawGraph();
 	}
-	
+
+	/**
+	 * Draw the graph according to this methods the Graph from a string.
+	 */
 	public void drawGraph() {
 		setScale();
 		drawEdges();
@@ -159,12 +178,6 @@ public class Graph_GUI extends JFrame implements ActionListener{
 			}
 		}
 	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
 
 

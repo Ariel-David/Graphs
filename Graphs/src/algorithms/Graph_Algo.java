@@ -36,14 +36,14 @@ import utils.StdDraw;
  */
 public class Graph_Algo implements graph_algorithms,Serializable{
 	public graph graph;
-	
+
 	/**
 	 * Default constructor
 	 */
 	public Graph_Algo() {
 		this.graph = new DGraph();
 	}
-	
+
 	/**
 	 * copy constructor
 	 * @param g.
@@ -96,7 +96,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 			System.out.println("IOException is caught"); 
 		}
 	}
-	
+
 
 	@Override
 	public boolean isConnected() {
@@ -141,7 +141,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}
 		return s;
 	}
-	
+
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		String s = "";
@@ -192,26 +192,65 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		// TODO Auto-generated method stub
-		ArrayList<node_data> left = new ArrayList<node_data>();
-		ArrayList<node_data> ans = new ArrayList<node_data>();
-		Iterator<Integer> itr = targets.iterator();
-		while(itr.hasNext()) {
-			int id = itr.next();
-			if(graph.getNode(id)==null) {
+		List<node_data> Nodes = new ArrayList<node_data>();
+		List<node_data> temp = new ArrayList<node_data>();
+		List<node_data> ans = new ArrayList<node_data>();
+
+		for (Integer key : targets) {
+			if(graph.getNode(key)==null) {
 				return null;
 			}
-			left.add(graph.getNode(id));
+			Nodes.add(graph.getNode(key));
 		}
 
-		for(int i = 0; i<left.size()-1; i++) {
-			ArrayList<node_data> temp = (ArrayList<node_data>) shortestPath(left.get(i).getKey(), left.get(i+1).getKey());
-			if(temp==null) {
+		for(int i=0; i<Nodes.size()-1; i++) {
+			List<node_data> list = new ArrayList<node_data>();
+
+			list = (ArrayList<node_data>) shortestPath(Nodes.get(i).getKey(), Nodes.get(i+1).getKey());
+
+			if(list==null) {
 				return null;
 			}
-			for(int j =0; j<temp.size(); j++) {
-				if(!ans.contains(temp.get(j)))
-					ans.add(temp.get(j));
+			for(int j=0; j<list.size(); j++) {
+				temp.add(list.get(j));
+			}
+		}
+		if(temp.size() % 2 == 0) {
+			for(int i=0; i<temp.size(); i++) {
+				if(i == temp.size()-1) {
+					if(temp.get(i-1) != temp.get(i)) {
+						ans.add(temp.get(i));
+					}
+				}
+				else if(temp.get(i) == temp.get(i+1)) {
+					ans.add(temp.get(i));
+					i++;
+				}
+				else {
+					ans.add(temp.get(i));
+				}
+			}
+		}
+		else {
+			for(int i=0; i<temp.size()-1; i++) {
+				if(i == temp.size()-2) {
+					if(temp.get(i) == temp.get(i+1)) {
+						ans.add(temp.get(i));
+						i++;
+					}
+					else {
+						ans.add(temp.get(i));
+						ans.add(temp.get(i+1));
+					}
+				}
+
+				if(temp.get(i) == temp.get(i+1)) {
+					ans.add(temp.get(i));
+					i++;
+				}
+				else {
+					ans.add(temp.get(i));
+				}
 			}
 		}
 		return ans;	
