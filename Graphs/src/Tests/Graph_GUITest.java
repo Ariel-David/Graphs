@@ -9,7 +9,6 @@ import gui.Graph_GUI;
 import utils.Point3D;
 
 class Graph_GUITest {
-
 	@Test
 	void testDrawGraph() {
 		Graph_Algo ga = new Graph_Algo();
