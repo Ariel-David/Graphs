@@ -55,13 +55,18 @@ public class DGraphTest {
 		DGraph g2 = new DGraph();
 		Node n1 = new Node(5,0,0,new Point3D(3,4),"");
 		Node n2 = new Node(8,0,0,new Point3D(1,4),"");
+		Node n3 = new Node(5,0,0,new Point3D(3,4),"");
+		Node n4 = new Node(8,0,0,new Point3D(1,4),"");
 		g1.addNode(n1);
 		g1.addNode(n2);
-		g2.addNode(n1);
-		g2.addNode(n2);
+		
+		g2.addNode(n3);
+		g2.addNode(n4);
+		
 		g1.connect(n1.getKey(), n2.getKey(), 7);
-		g2.connect(n1.getKey(), n2.getKey(), 7);
-		g2.removeEdge(n1.getKey(), n2.getKey());
+		g2.connect(n3.getKey(), n4.getKey(), 7);
+		
+		g2.removeEdge(n3.getKey(), n4.getKey());
 		assertNotEquals(g1.countEdge, g2.countEdge);
 	}
 
