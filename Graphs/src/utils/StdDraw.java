@@ -1665,6 +1665,17 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	 *
 	 * @param  filename the name of the file with one of the required suffixes
 	 */
+	
+	public static void load(String filename) {
+		String path = "The-Maze-Of-Waze\\The Maze Of Waze\\data";
+		File folder = new File(path);
+		File[] possibleValues = folder.listFiles();
+		Object file = JOptionPane.showInputDialog(null, "Choose file", "Message",
+				JOptionPane.INFORMATION_MESSAGE, null, possibleValues, possibleValues[0]);
+		if (file!=null)
+			graphGui.init(file.toString());
+	}
+	
 	public static void save(String filename) {
 		if (filename == null) throw new IllegalArgumentException();
 		File file = new File(filename);

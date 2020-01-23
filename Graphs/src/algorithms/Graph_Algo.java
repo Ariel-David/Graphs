@@ -29,9 +29,9 @@ import dataStructure.graph;
 import dataStructure.node_data;
 import utils.StdDraw;
 /**
- * This empty class represents the set of graph-theory algorithms
- * which should be implemented as part of Ex2 - Do edit this class.
- * @author 
+ * This class represents the set of graph-theory algorithms
+ * which should be implemented as part of Ex2
+ * @author Ariel David
  *
  */
 public class Graph_Algo implements graph_algorithms,Serializable{
@@ -97,7 +97,11 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}
 	}
 
-
+	/**
+	 * Returns true if and only if (iff) there is a valid path from EVREY node to each
+	 * other node. NOTE: assume directional graph - a valid path (a-->b) does NOT imply a valid path (b-->a).
+	 * @return
+	 */
 	@Override
 	public boolean isConnected() {
 		if(this.graph.nodeSize() <= 1) {
@@ -123,6 +127,12 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return flag;
 	}
 
+	/**
+	 * this methods check the neighbours of current node and return a new list of the neighbours
+	 * @param currentNode
+	 * @param s
+	 * @return
+	 */
 	private Stack<node_data> neiburs(node_data currentNode, Stack<node_data> s) {
 		Iterator<edge_data> iterEdge = graph.getE(currentNode.getKey()).iterator();
 		if(s.isEmpty()) {
@@ -142,6 +152,12 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return s;
 	}
 
+	/**
+	 * returns the length of the shortest path between src to dest
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return
+	 */
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		String s = "";
@@ -157,7 +173,13 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return graph.getNode(dest).getWeight();
 
 	}
-
+	/**
+	 * This is the recursive method thats get a src of a node and dest of another node,
+	 * and calculating the shortest path from the src node to his dest.
+	 * @param src - represent the start node.
+	 * @param dest - represent the final node.
+	 * @param info - a string that helps to store the path that have past at each point of the way.
+	 */
 	private void shortestPathDistHelper(int src, int dest, String s) {
 		if(graph.getNode(src).getTag() == 1 && graph.getNode(src) == graph.getNode(dest)) {
 			return;
@@ -174,6 +196,14 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}
 	}
 
+	/**
+	 * returns the the shortest path between src to dest - as an ordered List of nodes:
+	 * src--> n1-->n2-->...dest
+	 * see: https://en.wikipedia.org/wiki/Shortest_path_problem
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return
+	 */
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		List<node_data> visited = new ArrayList<>();
@@ -190,6 +220,14 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		return visited;
 	}
 
+	/**
+	 * computes a relatively short path which visit each node in the targets List.
+	 * Note: this is NOT the classical traveling salesman problem, 
+	 * as you can visit a node more than once, and there is no need to return to source node - 
+	 * just a simple path going over all nodes in the list. 
+	 * @param targets
+	 * @return
+	 */
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
 		List<node_data> Nodes = new ArrayList<node_data>();

@@ -17,8 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 
-
 public class DGraph implements graph, Serializable{
+	/**
+	 * A hash map that contains all the nodes in this DGraph as values,
+	 *  and their key's are the map keys.
+	 */
 	public Map<Integer, node_data> graph = new HashMap<Integer,node_data>();
 	public int countNode = 0;
 	public int countEdge = 0;
