@@ -70,4 +70,15 @@ public class DGraphTest {
 		assertNotEquals(g1.countEdge, g2.countEdge);
 	}
 
+	@Test
+	public void testCrazy() {
+		boolean flag = false;
+		DGraph c = DGraph.createCrazy();
+		int s = c.getV().size();
+		if(1000000 == s) {
+			flag = true;
+		}
+		assertTrue(flag);
+	}
+
 }

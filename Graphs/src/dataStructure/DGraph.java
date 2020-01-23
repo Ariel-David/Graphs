@@ -1,20 +1,18 @@
 package dataStructure;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+
+
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
+
 import java.util.HashMap;
-import java.util.Hashtable;
+
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+
+
 import java.util.Map;
+
+import utils.Point3D;
 
 
 public class DGraph implements graph, Serializable{
@@ -97,7 +95,15 @@ public class DGraph implements graph, Serializable{
 			return n;
 		}
 	}
-
+	
+	public static  DGraph createCrazy() {
+		DGraph c = new DGraph();
+		for(int i=0; i<1000000; i++) {
+			c.addNode(new Node(i, 0.0,0,new Point3D(i/1000,i/1000), ""));
+		}
+		return c;
+	}
+	
 	@Override
 	public edge_data removeEdge(int src, int dest) {
 		if(((Node)graph.get(src)).edges.containsKey(dest)) {
